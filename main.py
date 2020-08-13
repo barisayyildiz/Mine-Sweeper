@@ -1,5 +1,5 @@
 import pygame
-from grid import *
+from lib import *
 import random
 import sys
 
