@@ -38,19 +38,19 @@ class Box():
 
 		try:
 			if self.value > 0:
-				#TEXT İŞLEMLERİ
+				#text operations
 				text = font.render(str(self.value), True, white)
 				textRect = text.get_rect()
 				textRect.center = ((self.margin + self.width)*column + self.margin + self.width//2, (self.margin + self.height)*row + self.margin + self.height//2)
 				screen.blit(text, textRect)
 			elif self.value < 0 and self.display == True:
-				#MAYIN RESMİNİ KOY
+				#putting mine images
 				imageRect = mine.get_rect()
 				imageRect.center = ((self.margin + self.width)*column + self.margin + self.width//2, (self.margin + self.height)*row + self.margin + self.height//2)
 				screen.blit(mine, imageRect)
 		except TypeError:
 			if self.value == "flag":
-				#BAYRAK RESMİNİ KOY
+				#putting flag images
 				imageRect = flag.get_rect()
 				imageRect.center = ((self.margin + self.width)*column + self.margin + self.width//2, (self.margin + self.height)*row + self.margin + self.height//2)
 				screen.blit(flag, imageRect)
@@ -61,7 +61,6 @@ class Box():
 		self.copyValue = self.value
 
 	def onclick(self):
-		#Tıklama işlemi yapıldığında displayi true olacak
 		if self.display == False:
 			self.display = True
 
@@ -73,7 +72,7 @@ class Box():
 
 
 	def incerease_value(self):
-		#Mayın sayma sırasında kenar ve köşelerinde mayın varsa değer artacak
+		#increases the value
 		if self.value != -1:
 			self.value += 1
 			if self.value == 1:
@@ -86,7 +85,6 @@ class Box():
 				self.color = yellow
 
 		self.copyValue = self.value
-		print("self.copyValue : ", self.copyValue)
 
 	def place_mine(self):
 		self.color = white

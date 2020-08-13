@@ -146,8 +146,6 @@ while run:
 					gameOver = True
 
 
-				print(" left click -> " , currentBox.value)
-
 			#right click
 			elif pygame.mouse.get_pressed()[2] == 1:
 				pos = pygame.mouse.get_pos()
