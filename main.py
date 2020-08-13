@@ -1,5 +1,5 @@
 import pygame
-from grid import Box
+from grid import *
 import random
 import sys
 
@@ -14,22 +14,13 @@ mine = pygame.image.load("images//mine.png")
 flag = pygame.image.load("images//flag.png")
 
 
-#-------Colors
-white = (255,255,255)
-black = (0,0,0)
-red = (255,0,0)
-green = (0,255,0)
-blue = (0,0,255)
-yellow = (255,255,0)
-
-
 #------GRID CONSTANTS
 WIDTH = 35
 HEIGHT = 35
 AMOUNT = 25
 MARGIN = 1
 
-MINE_NUMBER = 20
+MINE_NUMBER = 5
 
 screen = pygame.display.set_mode((WIDTH * AMOUNT + (AMOUNT + 1) * MARGIN, HEIGHT * AMOUNT + (AMOUNT + 1) * MARGIN))
 
@@ -42,7 +33,7 @@ for row in range(AMOUNT):
 	for column in range(AMOUNT):
 		grid[row].append(Box(row, column, WIDTH, HEIGHT, MARGIN))
 
-#placing mines
+#placing mines randomly
 mineLocation = []
 for i in range(MINE_NUMBER):
 	rndX = random.randint(0,AMOUNT-1)
@@ -98,14 +89,49 @@ def isFillable(x, y):
         grid[x][y].onclick()
 
 
+def message(beaten):
+	font = pygame.font.Font('freesansbold.ttf', 64)
+
+	if beaten:
+		string = "Well Done..."
+	else:
+		string = "Game Over..."
+
+	while True:
+		for event in pygame.event.get():
+			if event.type == pygame.QUIT:
+				return
+
+		#fill the screen to black
+		screen.fill(black)
+
+		#set the text
+		text = font.render(string, True, white)
+		textRect = text.get_rect()
+		textRect.center = ( ((MARGIN + WIDTH) * AMOUNT ) * 0.5, ((MARGIN + HEIGHT) * AMOUNT ) * 0.5 )
+		
+		#put the text on the screen
+		screen.blit(text, textRect)
+
+		#update the sreen
+		pygame.display.update()
+		clock.tick(60)
+
+
 #main game loop
 gameOver = False
 click = False
 run = True
+beaten = False			#game win or lose
+score = 0
 while run:
+	#event loop
 	for event in pygame.event.get():
+		#exit condition
 		if event.type == pygame.QUIT:
 			run = False
+
+		#left click
 		if event.type == pygame.MOUSEBUTTONDOWN:
 			if pygame.mouse.get_pressed()[0] == 1:
 				pos = pygame.mouse.get_pos()
@@ -118,18 +144,32 @@ while run:
 					position = [row, column]
 				elif currentBox.value == -1:
 					gameOver = True
+
+
+				print(" left click -> " , currentBox.value)
+
+			#right click
 			elif pygame.mouse.get_pressed()[2] == 1:
 				pos = pygame.mouse.get_pos()
 				column = pos[0] // (WIDTH + MARGIN)
 				row = pos[1] // (HEIGHT + MARGIN)
 				currentBox = grid[row][column]
-				currentBox.placeFlag()
+				currentBox.toggleFlag()
+
+
+				if currentBox.value == "flag" and currentBox.copyValue == -1:
+					score += 1
+				elif currentBox.value != "flag" and currentBox.copyValue == -1:
+					score -= 1
+
+				if score == MINE_NUMBER:
+					gameOver = True
+					beaten = True
 
 
 	if click == True:
 		floodFill(position[0], position[1])
 	click = False
-
 
 
 	screen.fill(black)
@@ -156,5 +196,8 @@ while run:
 	if gameOver == True:
 		run = False
 		pygame.time.wait(1000)
+		message(beaten)
+
+
 
 pygame.quit()

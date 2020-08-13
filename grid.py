@@ -65,7 +65,7 @@ class Box():
 		if self.display == False:
 			self.display = True
 
-	def placeFlag(self):
+	def toggleFlag(self):
 		if self.value != "flag":
 			self.value = "flag"
 		elif self.value == "flag":
@@ -84,20 +84,22 @@ class Box():
 				self.color = blue
 			elif self.value == 4:
 				self.color = yellow
+
+		self.copyValue = self.value
+		print("self.copyValue : ", self.copyValue)
+
 	def place_mine(self):
 		self.color = white
 		self.value = -1
+		self.copyValue = -1
 
 
 
 """
 self value:
-	0 => boş
-	-1 => mayın
-	1,2,...8 => kenar/köşe
-	"flag" => bayrak
-
-
-
+	1,2,3,4,5,6,7,8	=> number of mines at sides and corners
+	0								=> empty
+	-1							=> mine
+	"flag"					=> flag
 
 """
