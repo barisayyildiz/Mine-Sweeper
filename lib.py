@@ -240,8 +240,8 @@ def gameLoop(AMOUNT, WIDTH, HEIGHT, MARGIN, MINE_NUMBER):
 			if event.type == pygame.QUIT:
 				run = False
 
-			#left click
 			if event.type == pygame.MOUSEBUTTONDOWN:
+				#left click
 				if pygame.mouse.get_pressed()[0] == 1:
 					pos = pygame.mouse.get_pos()
 					column = pos[0] // (WIDTH + MARGIN)
@@ -261,6 +261,11 @@ def gameLoop(AMOUNT, WIDTH, HEIGHT, MARGIN, MINE_NUMBER):
 					column = pos[0] // (WIDTH + MARGIN)
 					row = pos[1] // (HEIGHT + MARGIN)
 					currentBox = grid[row][column]
+
+
+					if currentBox.display == True:
+						break
+
 					currentBox.toggleFlag()
 
 
@@ -306,5 +311,3 @@ def gameLoop(AMOUNT, WIDTH, HEIGHT, MARGIN, MINE_NUMBER):
 			message(beaten, screen, MARGIN, WIDTH, HEIGHT, AMOUNT)
 
 	pygame.quit()
-
-
